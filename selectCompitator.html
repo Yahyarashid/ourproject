@@ -14,7 +14,7 @@
 	  <div class="content">	
 	  	
 		<div class="com1">
-			<img id="com1" src="background.jpg">
+			<img id="com1" src="">
 			<label id="name1Txt" class="name"></label>
 		</div>
 		<div class="vs">
@@ -27,18 +27,19 @@
 		 
 	  </div>
 	  <div class="btns">
-			<button id="btnRoll" class="btn">Roll</button>
-		    <button id="btnReset" class="btn">Reset</button>
-		    <button id="btnStart" class="btn">Game Start</button>
+			<button id="btnRoll" class="btn-start">Roll</button>
+		    <button id="btnReset" class="btn-start">Reset</button>
+		    <button id="btnStart" class="btn-start">Game Start</button>
 	  </div>
 
 	</div>
 
 	<script type="text/javascript">
-		
+		// declare variable to link elements in html with javascript using jquery
 		var btnRoll = $('button#btnRoll');
 		var btnReset = $('button#btnReset');
 		var btnStart = $('button#btnStart');
+		
 
 		var comImg1 = $('img#com1');
 		var comImg2 = $('img#com2');
@@ -46,13 +47,18 @@
 		var labelName1 = $('label#name1Txt');
 		var labelName2 = $('label#name2Txt');
  
+ 		// declare 2 variable to save the last random number to select the member
     var randIndex1;
     var randIndex2;
+    // declare stop variable to save time interval value
     var stop;
+
+    // this button to choose the competitors
     btnRoll.on('click', function() {
     	selectCompetitors()
 		});
 
+    // this button is for reseting the competitors
 		btnReset.on('click', function(){
     	labelName1.text('');
     	labelName2.text('');  
@@ -60,45 +66,86 @@
       stop = 0; 
 		})
 
+		// this button to start the game
     btnStart.on('click', function() {
-       var game = '<div class="continer"><div class="header"><div class="player1"><div class="compTxt"><label id="player1Name">Mohammad</label></div><div class="compTxt"> <label id="player1Score">Score 1</label></div></div><div class="timer compTxt"><label id="timerValue">30s</label></div><div class="player2"><div class="compTxt"> <label id="player2Name">Mohammad</label></div><div class="compTxt"> <label id="player2Score">Score1</label></div></div></div><div class="questions"><div class="questionTitle"><h1 id="questionTitle"></h1></div><div class="questionDesc"><p id="questionDesc"></p></div><div class="answers"><div id="answer1" class="answer1"></div><div id="answer2" class="answer2"></div></div></div></div>';
+    	// declare game variable to save another body to another view
+       var game = '<div class="continer"><div class="header"><div class="player1"><div class="compTxt"><label id="player1Name">Mohammad</label></div><div class="compTxt"> <label id="player1Score">Score 1</label></div></div><div class="timer compTxt"><label id="timerValue">30s</label></div><div class="player2"><div class="compTxt"> <label id="player2Name">Mohammad</label></div><div class="compTxt"> <label id="player2Score">Score1</label></div></div></div><div class="questions"><div class="questionTitle"><h1 id="questionTitle"></h1></div><div class="questionDesc"><p id="questionDesc"></p></div><div class="answers"><div id="answer1" class="answer1"></div><div id="answer2" class="answer2"></div></div></div><div class="resultBtn"><div><button id="showAnBtn" class="btn-start clickBtn1">Show Answer</button></div><div><button id="nextQBtn" class="btn-start clickBtn2">Next Question</button></div></div></div>';
 
+       // adding the competitors that selected to competitorDb object
       competitorsDb.competitor1 = mackCompetitor(studentsDb[randIndex1]);
       competitorsDb.competitor2 = mackCompetitor(studentsDb[randIndex2]);
+      // here to clear all the content of the last page in the body.
       $('body').text('');
+      // appending a new content to body.
       $('body').append(game);
-      
+      // declare 2 variables, player1 and player2 to link the name of each competitor with js.
       var player1Name = $('label#player1Name');
 	    var player2Name = $('label#player2Name');
+	    // declare 2 variables playerscore1 and 2 to link the score of each competitor.
 	    var player1Score = $('label#player1Score');
 	    var player2Score = $('label#player2Score');
+	    // declare 2 variables to link the button.
+	    var btnShowAns =$('button#showAnBtn');
+		  var btnNextQ =$('button#nextQBtn');
 
 	    console.log(competitorsDb);
-    
+    	// add competitor1 name to the page 
       player1Name.text(competitorsDb.competitor1.info.firstName);
+      // add competitor2 name to the page 
       player2Name.text(competitorsDb.competitor2.info.firstName); 
+      // show competitors score to the page 
       player1Score.text(competitorsDb.competitor1.score);
-      player2Score.text(competitorsDb.competitor2.score)
-      showQ();
+      player2Score.text(competitorsDb.competitor2.score);
+      // declare a variable take a timer function that work as a timer.
       var timer1 = timer();
+      // start timer 
       startTimer(timer1);
-	});
+      // to show the question
+      showQ();
+	  });
 
 
-  function showQ(){
    
-  $('h1#questionTitle').text('Q1: ' + question1.title);
-  $('p#questionDesc').text(question1.desc);
-  each(question1.answers, function(elem, i){
-  	var $row = '<div><input  type="radio" name="player1"><label id="ans"> A. mohammad</label></div>';
-  	$('input').attr('id', elem.id);
-  	$('label#ans').attr('for', elem.id);
-  	$('label#ans').text(elem.id + '. ' + elem.value);
-  	$($row).appendTo($('#answer1'));
-  })
 
+    // thias function to show the game questions.
+  function showQ(){
+    
+	  $('h1#questionTitle').text('Q1: ' + question1.title);
+	  $('p#questionDesc').text(question1.desc);
+	  // to move over array of question's answers and added each answer in the page
+	  each(question1.answers, function(elem, i){
+	  	console.log(elem)
+	  	// declare row and row 1 to select container div to append all answer to player 1 and 2
+	  	var $row = $('<div></div>');
+	    var $row1 = $('<div></div>');
+	    // declare lable 1 and 2 to select label to append to answer container to each competitor
+      var $label1 = $('<label class="ans1"></label>');
+      var $label2 = $('<label class="ans2"></label>');
+      // declare input 1 and 2 to select radio button to append to answer container to each competitor
+      var $input1 = $('<input type="radio" name="player1">');
+      var $input2 = $('<input type="radio" name="player2">');
+      // adding some of the attribute to radio button input and label
+	  	$input1.attr('id', elem.id);
+	  	$input1.attr('value', elem.correct);
+	  	$label1.attr('id', elem.id);
+	  	$label1.text(elem.id + '. ' + elem.value);
+	  	$input1.appendTo($row);
+	  	$label1.appendTo($row);
+			$row.appendTo($('#answer1'));
+
+	  	$label2.attr('id', elem.id);
+	  	$label2.text(elem.id + '. ' + elem.value);
+	  	$input2.appendTo($row1);
+	  	$label2.appendTo($row1);
+	  	$row1.appendTo($('#answer2'));
+	  });
   }
 
+   btnNextQ.on('click', function() {
+    	window.alert("hello");
+		});
+   
+   // function take a timer object and start timer 
   function startTimer(timer){
     stop = setInterval(function(){
      if (timer.time === 0) {
@@ -110,6 +157,7 @@
     },1000);
   }  
 
+  // function to select the competitors
 	function selectCompetitors() {
 			generateRandNames();
     	 setTimeout(() => {
@@ -118,23 +166,29 @@
     	 }, 3000)
 	}
 
+	//function selector to choose the last result of random competitor
 	function selector() {	
 	  randIndex1 = randInt(studentsDb.length);
 	  randIndex2 = randInt(studentsDb.length);
 	  if (randIndex1 !== randIndex2) {
 	    labelName1.text(studentsDb[randIndex1].firstName);
 	    labelName2.text(studentsDb[randIndex2].firstName);
+      comImg1.attr('src', studentsDb[randIndex1].image);
+      comImg2.attr('src', studentsDb[randIndex2].image);	    
 	  } else {
 	    selector();
 	  }
 	}
 
+	// function that generate random names and image for competition
 	function generateRandNames() {
 		stop = setInterval(function () {
       var student1 = studentsDb[randInt(studentsDb.length)];
       var student2 = studentsDb[randInt(studentsDb.length)];
       labelName1.text(student1.firstName);
       labelName2.text(student2.firstName);
+      comImg1.attr('src', student1.image);
+      comImg2.attr('src', student2.image);
     }, 100)
   }
 
