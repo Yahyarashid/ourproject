@@ -40,7 +40,6 @@
 		var btnReset = $('button#btnReset');
 		var btnStart = $('button#btnStart');
 		
-
 		var comImg1 = $('img#com1');
 		var comImg2 = $('img#com2');
 
@@ -86,7 +85,27 @@
 	    var player2Score = $('label#player2Score');
 	    // declare 2 variables to link the button.
 	    var btnShowAns =$('button#showAnBtn');
-		  var btnNextQ =$('button#nextQBtn');
+		  var btnNextQu =$('button#nextQBtn');
+
+		  btnShowAns.on('click', function() {
+        	var radioPlayer1 = $('input[name = player1]:checked').val();
+        	var radioPlayer2 = $('input[name = player2]:checked').val();
+        	if (radioPlayer1) {
+        		competitorsDb.competitor1.increaseScore();
+        		player1Score.text(competitorsDb.competitor1.score);
+        	} else {
+            
+        	}
+        	if (radioPlayer2) {
+        		competitorsDb.competitor2.increaseScore();
+        		player2Score.text(competitorsDb.competitor2.score);
+        	} else {
+        		
+        	} 
+		  });
+		  btnNextQu.on('click', function() {
+        	window.alert("hello");
+		  });
 
 	    console.log(competitorsDb);
     	// add competitor1 name to the page 
@@ -104,12 +123,8 @@
       showQ();
 	  });
 
-
-   
-
     // thias function to show the game questions.
   function showQ(){
-    
 	  $('h1#questionTitle').text('Q1: ' + question1.title);
 	  $('p#questionDesc').text(question1.desc);
 	  // to move over array of question's answers and added each answer in the page
@@ -141,10 +156,8 @@
 	  });
   }
 
-   btnNextQ.on('click', function() {
-    	window.alert("hello");
-		});
-   
+  
+
    // function take a timer object and start timer 
   function startTimer(timer){
     stop = setInterval(function(){
@@ -192,7 +205,7 @@
     }, 100)
   }
 
-	</script>
+ </script>
 
 </body>
 </html>
